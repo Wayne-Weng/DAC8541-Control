@@ -1,0 +1,87 @@
+C51 COMPILER V9.50a   DAC8541_CTRL                                                         03/03/2013 17:36:44 PAGE 1   
+
+
+C51 COMPILER V9.50a, COMPILATION OF MODULE DAC8541_CTRL
+OBJECT MODULE PLACED IN DAC8541_Ctrl.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE DAC8541_Ctrl.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          /*
+   2          * Control functions of DAC8541 Parallel 16 bit DAC.
+   3          *
+   4          * |Author | Wayne
+   5          * |Date   | 2013.2.23
+   6          * |Version| 1
+   7          *   
+   8          * |NOTE   | P0->Control,P0.0~P0.7(CS,RW,LDAC,RST,RSTSEL,BTCUSB,PD1,PD0)
+   9          *           P2->Bit0~Bit7(P2.0~P2.7)
+  10          *           P3->Bit8~Bit15(P3.0~P3.7) 
+  11          */
+  12          
+  13          #include <reg_mpc82g516.h>
+  14          #include "typedef.h"
+  15          #include "delaytime.h"
+  16          #include "DAC8541_Ctrl.h"
+  17          
+  18          void DAC8541_Init(void){
+  19   1        
+  20   1        //IO Port Mode Config.
+  21   1        P0M0=0x00;
+  22   1        P0M1=0xff;    //Set P0(Control) PP output.
+  23   1        P2M0=0x00;
+  24   1        P2M1=0x00;    //Set P2 Bi-dir.
+  25   1        P3M0=0x00;
+  26   1        P3M1=0x00;    //Set P3 Bi-dir.
+  27   1        
+  28   1        //Control Signal Initialation Config.
+  29   1        CS=1;              //Set CS high.
+  30   1        BTCUSB=0;          //Set BTCUSB low(unipolar straight binary).
+  31   1        PD1=0;             //Set PD1 low(Disable power down mode).
+  32   1        PD0=0;             //Set PD0 low(Disable power down mode).
+  33   1        ResetDAC(resetToMid);       //Reset to mid-scale
+  34   1        
+  35   1      }
+  36          
+  37          void ResetDAC(u8 resetMode){
+  38   1        
+  39   1        RST=0;     //Set RST low.
+  40   1        if(resetMode==resetToMid)    RSTSEL=1;  //Set RSTSEL high(reset to mid-scale).
+  41   1        else if(resetMode==resetToMin)    RSTSEL=0;  //Set RSTSEL low(reset to min-scale).
+  42   1        //defualt?
+  43   1        RST=1;     //Set RST high(rising edge trigger).
+  44   1        
+  45   1      }
+  46          
+  47          void WriteDAC(u16 value){   //Single shot Writing.    //write BTC mode function?
+  48   1        
+  49   1        LDAC=0;            //Set LDAC low.
+  50   1        RW=0;              //Set RW low(write mode).
+  51   1          
+  52   1        //Set value to IO.
+  53   1        LByte=value&0xff;
+  54   1        HByte=(value>>8)&0xff;
+  55   1        
+C51 COMPILER V9.50a   DAC8541_CTRL                                                         03/03/2013 17:36:44 PAGE 2   
+
+  56   1        CS=0;              //Set CS low(enable activity,let input data into DAC register).
+  57   1        
+  58   1        //Load value on the register to DAC output.
+  59   1        LDAC=1;            //Set LDAC high(rising edge trigger).
+  60   1        
+  61   1        CS=1;              //Set CS high(disable activity,latch data in register).
+  62   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     61    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

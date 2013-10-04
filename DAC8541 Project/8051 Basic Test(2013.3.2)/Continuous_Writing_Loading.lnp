@@ -1,0 +1,6 @@
+"Continuous_Writing_Loading.obj",
+"DAC8541_Ctrl.obj",
+"delaytime.obj",
+"ADC_Ctrl.obj" 
+TO "Continuous_Writing_Loading" 
+RAMSIZE(256) 

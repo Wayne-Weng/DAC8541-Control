@@ -1,0 +1,69 @@
+C51 COMPILER V9.50a   ADC_CTRL                                                             03/03/2013 17:36:44 PAGE 1   
+
+
+C51 COMPILER V9.50a, COMPILATION OF MODULE ADC_CTRL
+OBJECT MODULE PLACED IN ADC_Ctrl.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ADC_Ctrl.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          /*
+   2          * Control functions of ADC on MPC82G516
+   3          *
+   4          * |Author | Wayne
+   5          * |Date   | 2013.3.2
+   6          * |Version| 1
+   7          *   
+   8          * |NOTE   | 
+   9          * 
+  10          */
+  11          
+  12          #include <reg_mpc82g516.h>
+  13          #include "typedef.h"
+  14          #include "ADC_Ctrl.h"
+  15          
+  16          //|Input| convert speed, channel used, current Channel
+  17          void SingleShot_Config(u8 speed,u8 channelUsed,u8 currentChannel){
+  18   1        
+  19   1        //Input Port Hi-Z Config selection
+  20   1        P1M0|=channelUsed;
+  21   1        P1M1&=~channelUsed;
+  22   1        
+  23   1        //clear ADCTL(ADCON,SPEED1~0,ADCI,ADCS,CHS2~0)
+  24   1        ADCTL&=0x00;
+  25   1        //set the required details
+  26   1        ADCTL|=ADCON|speed|currentChannel;
+  27   1        
+  28   1      }
+  29          
+  30          //To use this function, SingleShot_Config should be processed
+  31          u16 SingleShot_Process(void){
+  32   1      
+  33   1        //starting a convertion
+  34   1        ADCTL|=ADCS;
+  35   1        //Wait until finished(flag set)
+  36   1        while(ADCTL&ADCI!=0x10);
+  37   1        //clear ADCI
+  38   1        ADCTL&=~ADCI;
+  39   1        
+  40   1        //return the concatenated result value  
+  41   1        return ADCH*4+ADCL;
+  42   1        
+  43   1      }
+  44          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     41    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.50a   ADC_CTRL                                                             03/03/2013 17:36:44 PAGE 2   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

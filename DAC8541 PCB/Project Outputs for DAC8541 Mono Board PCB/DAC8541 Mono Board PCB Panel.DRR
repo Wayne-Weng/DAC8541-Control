@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: DAC8541 Mono Board PCB Panel.PcbDoc   2013/1/17  ¤W¤È 12:08:37
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII Plated RoundHoles File : DAC8541 Mono Board PCB Panel-Plated.TXT
+EIA File   : DAC8541 Mono Board PCB Panel.DRL
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        30mil (0.762mm)          Round          384              52.15 Inch (1324.65 mm)
+T2        126mil (3.2004mm)        Round          4                15.40 Inch (391.16 mm)
+---------------------------------------------------------------------------
+Totals                                            388              67.55 Inch (1715.81 mm)
+
+Total Processing Time (hh:mm:ss) : 00:00:01
